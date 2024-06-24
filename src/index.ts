@@ -1,5 +1,5 @@
 import { ABIRegistry, Blockchain } from '@btc-vision/btc-runtime/runtime';
-import { wBTC } from './contracts/WBTC';
+import { Moto } from './contracts/Moto';
 
 export function defineSelectors(): void {
     ABIRegistry.defineGetterSelector('address', false);
@@ -19,24 +19,9 @@ export function defineSelectors(): void {
     ABIRegistry.defineGetterSelector('symbol', false);
     ABIRegistry.defineGetterSelector('totalSupply', false);
     ABIRegistry.defineGetterSelector('maxSupply', false);
-
-    ABIRegistry.defineMethodSelector('stake', true);
-    ABIRegistry.defineMethodSelector('unstake', true);
-    ABIRegistry.defineMethodSelector('stakedAmount', false);
-    ABIRegistry.defineMethodSelector('stakedReward', false);
-    ABIRegistry.defineMethodSelector('claim', true);
-
-    ABIRegistry.defineGetterSelector('rewardPool', false);
-    ABIRegistry.defineGetterSelector('totalStaked', false);
-
-    ABIRegistry.defineMethodSelector('addReward', true);
-
-    /** WBTC */
-    ABIRegistry.defineMethodSelector('requestWithdrawal', true);
-    ABIRegistry.defineMethodSelector('withdrawableBalanceOf', false);
 }
 
-Blockchain.contract = () => new wBTC();
+Blockchain.contract = () => new Moto();
 
 // VERY IMPORTANT
 export * from '@btc-vision/btc-runtime/runtime/exports';

@@ -2,7 +2,7 @@ import 'jest';
 
 // @ts-ignore
 import * as wasm from '../config/runDebug.js';
-import { wBTC } from '../src/contracts/WBTC';
+import { moto } from '../src/contracts/Moto';
 import {
     ABICoder,
     ABIDataTypes,
@@ -17,7 +17,7 @@ describe('I should be able to create my own smart contract for Bitcoin.', () => 
     const OWNER = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
     const CONTRACT_ADDRESS = 'bc1p5d7rjq7g6rdk2yhzks9smlaqtedr4dekq08ge8ztwac72sfr9rusxg3297';
 
-    let module: wBTC | null = null;
+    let module: moto | null = null;
     let moduleWasm: Awaited<typeof wasm.promise>;
 
     let decodedViewSelectors: SelectorsMap;
