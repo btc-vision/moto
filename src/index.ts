@@ -2,10 +2,12 @@ import { ABIRegistry, Blockchain } from '@btc-vision/btc-runtime/runtime';
 import { Moto } from './contracts/Moto';
 
 export function defineSelectors(): void {
+    /** OP_NET */
     ABIRegistry.defineGetterSelector('address', false);
     ABIRegistry.defineGetterSelector('owner', false);
     ABIRegistry.defineMethodSelector('isAddressOwner', false);
 
+    /** OP_20 */
     ABIRegistry.defineMethodSelector('allowance', false);
     ABIRegistry.defineMethodSelector('approve', true);
     ABIRegistry.defineMethodSelector('balanceOf', false);
@@ -19,6 +21,9 @@ export function defineSelectors(): void {
     ABIRegistry.defineGetterSelector('symbol', false);
     ABIRegistry.defineGetterSelector('totalSupply', false);
     ABIRegistry.defineGetterSelector('maxSupply', false);
+
+    /** Moto */
+    ABIRegistry.defineMethodSelector('airdrop', true);
 }
 
 Blockchain.contract = () => new Moto();
