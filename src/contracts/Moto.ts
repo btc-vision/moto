@@ -16,8 +16,6 @@ export class Moto extends OP_20 {
     public readonly name: string = 'Moto';
     public readonly symbol: string = 'MOTO';
 
-    //private readonly currentSupply: u256 = u256.fromU64(13_337_000);
-
     constructor() {
         super(u256.fromU64(2100000000000000));
     }
