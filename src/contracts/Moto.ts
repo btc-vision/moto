@@ -11,13 +11,8 @@ import {
 
 @final
 export class Moto extends OP_20 {
-    public readonly decimals: u8 = 8;
-
-    public readonly name: string = 'Moto';
-    public readonly symbol: string = 'MOTO';
-
     constructor() {
-        super(u256.fromU64(2100000000000000));
+        super(u256.fromU64(2100000000000000), 8, 'Moto', 'MOTO');
     }
 
     public override callMethod(method: Selector, calldata: Calldata): BytesWriter {
