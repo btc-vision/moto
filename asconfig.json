@@ -1,14 +1,8 @@
 {
     "targets": {
-        "debug": {
-            "outFile": "debug/debug.wasm",
-            "textFile": "debug/debug.wat",
-            "sourceMap": true,
-            "debug": true
-        },
-        "release": {
-            "outFile": "build/release.wasm",
-            "textFile": "build/release.wat",
+        "moto": {
+            "outFile": "build/moto.wasm",
+            "textFile": "build/moto.wat",
             "sourceMap": false,
             "optimizeLevel": 3,
             "shrinkLevel": 0,
