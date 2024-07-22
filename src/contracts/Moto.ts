@@ -1,11 +1,14 @@
 import { u256 } from 'as-bignum/assembly';
 import {
     Address,
+    Blockchain,
     BytesWriter,
     Calldata,
     encodeSelector,
     Map,
     OP_20,
+    Revert,
+    SafeMath,
     Selector,
 } from '@btc-vision/btc-runtime/runtime';
 
@@ -27,6 +30,9 @@ export class Moto extends OP_20 {
     }
 
     private airdrop(calldata: Calldata): BytesWriter {
+        const callee = Blockchain.callee();
+        this.onlyOwner(callee);
+
         const drops: Map<Address, u256> = calldata.readAddressValueTuple();
 
         const addresses: Address[] = drops.keys();
@@ -44,18 +50,37 @@ export class Moto extends OP_20 {
     }
 
     private airdropDefined(calldata: Calldata): BytesWriter {
+        const callee = Blockchain.callee();
+        this.onlyOwner(callee);
+
         const amount = calldata.readU256();
 
         const amountOfAddresses: u32 = calldata.readU32();
         for (let i: u32 = 0; i < amountOfAddresses; i++) {
             const address = calldata.readAddress();
 
-            this._mint(address, amount);
+            this.mintNoEvent(address, amount);
         }
 
         const writer: BytesWriter = new BytesWriter();
         writer.writeBoolean(true);
 
         return writer;
+    }
+
+    private mintNoEvent(to: Address, value: u256): void {
+        if (!this.balanceOfMap.has(to)) {
+            this.balanceOfMap.set(to, value);
+        } else {
+            const toBalance: u256 = this.balanceOfMap.get(to);
+            const newToBalance: u256 = SafeMath.add(toBalance, value);
+
+            this.balanceOfMap.set(to, newToBalance);
+        }
+
+        // @ts-ignore
+        this._totalSupply += value;
+
+        if (this._totalSupply.value > this.maxSupply) throw new Revert('Max supply reached');
     }
 }
