@@ -24,6 +24,7 @@ export function defineSelectors(): void {
 
     /** Moto */
     ABIRegistry.defineMethodSelector('airdrop', true);
+    ABIRegistry.defineMethodSelector('airdropDefined', true);
 }
 
 Blockchain.contract = () => new Moto();

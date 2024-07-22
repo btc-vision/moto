@@ -19,6 +19,8 @@ export class Moto extends OP_20 {
         switch (method) {
             case encodeSelector('airdrop'):
                 return this.airdrop(calldata);
+            case encodeSelector('airdropDefined'):
+                return this.airdropDefined(calldata);
             default:
                 return super.callMethod(method, calldata);
         }
@@ -31,6 +33,22 @@ export class Moto extends OP_20 {
         for (let i: i32 = 0; i < addresses.length; i++) {
             const address = addresses[i];
             const amount = drops.get(address);
+
+            this._mint(address, amount);
+        }
+
+        const writer: BytesWriter = new BytesWriter();
+        writer.writeBoolean(true);
+
+        return writer;
+    }
+
+    private airdropDefined(calldata: Calldata): BytesWriter {
+        const amount = calldata.readU256();
+
+        const amountOfAddresses: u32 = calldata.readU32();
+        for (let i: u32 = 0; i < amountOfAddresses; i++) {
+            const address = calldata.readAddress();
 
             this._mint(address, amount);
         }
