@@ -7,8 +7,6 @@ import {
     encodeSelector,
     Map,
     OP_20,
-    Revert,
-    SafeMath,
     Selector,
 } from '@btc-vision/btc-runtime/runtime';
 
@@ -40,7 +38,7 @@ export class Moto extends OP_20 {
             const address = addresses[i];
             const amount = drops.get(address);
 
-            this._mint(address, amount);
+            this._mint(address, amount, false);
         }
 
         const writer: BytesWriter = new BytesWriter();
@@ -54,12 +52,11 @@ export class Moto extends OP_20 {
         this.onlyOwner(callee);
 
         const amount = calldata.readU256();
-
         const amountOfAddresses: u32 = calldata.readU32();
         for (let i: u32 = 0; i < amountOfAddresses; i++) {
             const address = calldata.readAddress();
 
-            this.mintNoEvent(address, amount);
+            this._mint(address, amount, false);
         }
 
         const writer: BytesWriter = new BytesWriter();
@@ -68,7 +65,7 @@ export class Moto extends OP_20 {
         return writer;
     }
 
-    private mintNoEvent(to: Address, value: u256): void {
+    /*private mintNoEvent(to: Address, value: u256): void {
         if (!this.balanceOfMap.has(to)) {
             this.balanceOfMap.set(to, value);
         } else {
@@ -82,5 +79,5 @@ export class Moto extends OP_20 {
         this._totalSupply += value;
 
         if (this._totalSupply.value > this.maxSupply) throw new Revert('Max supply reached');
-    }
+    }*/
 }
