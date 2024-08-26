@@ -28,8 +28,8 @@ export class Moto extends OP_20 {
     }
 
     private airdrop(calldata: Calldata): BytesWriter {
-        const callee = Blockchain.callee();
-        this.onlyOwner(callee);
+        const origin = Blockchain.origin();
+        this.onlyOwner(origin);
 
         const drops: Map<Address, u256> = calldata.readAddressValueTuple();
 
@@ -48,8 +48,8 @@ export class Moto extends OP_20 {
     }
 
     private airdropDefined(calldata: Calldata): BytesWriter {
-        const callee = Blockchain.callee();
-        this.onlyOwner(callee);
+        const origin = Blockchain.origin();
+        this.onlyOwner(origin);
 
         const amount = calldata.readU256();
         const amountOfAddresses: u32 = calldata.readU32();
