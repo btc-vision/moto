@@ -12,23 +12,23 @@ import { u256 } from 'as-bignum/assembly';
 
 @final
 export class Moto extends OP_20 {
-    constructor() {
-        super(u256.fromU64(2100000000000000), 8, 'Moto', 'MOTO');
+    public constructor() {
+        super(u256.fromU64(2_100_000_000_000_000), 8, 'Moto', 'MOTO');
     }
 
-    public override callMethod(method: Selector, calldata: Calldata): BytesWriter {
+    public override execute(method: Selector, calldata: Calldata): BytesWriter {
         switch (method) {
             case encodeSelector('airdrop'):
                 return this.airdrop(calldata);
             case encodeSelector('airdropDefined'):
                 return this.airdropDefined(calldata);
             default:
-                return super.callMethod(method, calldata);
+                return super.execute(method, calldata);
         }
     }
 
     private airdrop(calldata: Calldata): BytesWriter {
-        this.onlyOwner(Blockchain.txOrigin);
+        this.onlyOwner(Blockchain.tx.sender);
 
         const drops: Map<Address, u256> = calldata.readAddressValueTuple();
 
@@ -47,7 +47,7 @@ export class Moto extends OP_20 {
     }
 
     private airdropDefined(calldata: Calldata): BytesWriter {
-        this.onlyOwner(Blockchain.txOrigin);
+        this.onlyOwner(Blockchain.tx.sender);
 
         const amount = calldata.readU256();
         const amountOfAddresses: u32 = calldata.readU32();
