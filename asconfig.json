@@ -5,9 +5,19 @@
             "textFile": "build/moto.wat",
             "sourceMap": false,
             "optimizeLevel": 3,
-            "shrinkLevel": 0,
-            "converge": false,
-            "noAssert": false
+            "shrinkLevel": 2,
+            "converge": true,
+            "noAssert": true,
+            "disable": [
+                "mutable-globals",
+                "sign-extension",
+                "nontrapping-f2i",
+                "bulk-memory"
+            ],
+            "runtime": "stub",
+            "memoryBase": 0,
+            "initialMemory": 1,
+            "maximumMemory": 512
         }
     },
     "options": {
