@@ -59,4 +59,3 @@ User acknowledges that they have read this License, understand it, and agree to 
 User also agrees that this License is the complete and exclusive statement of the agreement between the Licensor and the
 User and supersedes all proposals or prior agreements, oral or written, and any other communications between the
 Licensor and the User relating to the subject matter of this License.
-

@@ -23,17 +23,17 @@ Moto token
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/btc-vision/moto.git
-   ```
+    ```bash
+    git clone https://github.com/btc-vision/moto.git
+    ```
 2. Navigate to the repository directory:
-   ```bash
-   cd moto
-   ```
+    ```bash
+    cd moto
+    ```
 3. Install the necessary dependencies:
-   ```bash
-   npm i
-   ```
+    ```bash
+    npm i
+    ```
 
 ## Building the Contract
 
