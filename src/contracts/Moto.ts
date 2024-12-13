@@ -1,3 +1,4 @@
+import { u256 } from '@btc-vision/as-bignum/assembly';
 import {
     Address,
     AddressMap,
@@ -8,7 +9,6 @@ import {
     OP_20,
     Selector,
 } from '@btc-vision/btc-runtime/runtime';
-import { u256 } from 'as-bignum/assembly';
 
 @final
 export class Moto extends OP_20 {
