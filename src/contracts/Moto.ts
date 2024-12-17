@@ -1,14 +1,14 @@
+import { u256 } from '@btc-vision/as-bignum/assembly';
 import {
     Address,
+    AddressMap,
     Blockchain,
     BytesWriter,
     Calldata,
     encodeSelector,
-    Map,
     OP_20,
     Selector,
 } from '@btc-vision/btc-runtime/runtime';
-import { u256 } from 'as-bignum/assembly';
 
 @final
 export class Moto extends OP_20 {
@@ -20,42 +20,32 @@ export class Moto extends OP_20 {
         switch (method) {
             case encodeSelector('airdrop'):
                 return this.airdrop(calldata);
-            case encodeSelector('airdropDefined'):
-                return this.airdropDefined(calldata);
             default:
                 return super.execute(method, calldata);
         }
     }
 
-    private airdrop(calldata: Calldata): BytesWriter {
-        this.onlyOwner(Blockchain.tx.sender);
+    private _optimizedMint(address: Address, amount: u256): void {
+        this.balanceOfMap.set(address, amount);
+        this._totalSupply.addNoCommit(amount);
 
-        const drops: Map<Address, u256> = calldata.readAddressValueTuple();
-
-        const addresses: Address[] = drops.keys();
-        for (let i: i32 = 0; i < addresses.length; i++) {
-            const address = addresses[i];
-            const amount = drops.get(address);
-
-            this._mint(address, amount, false);
-        }
-
-        const writer: BytesWriter = new BytesWriter(1);
-        writer.writeBoolean(true);
-
-        return writer;
+        this.createMintEvent(address, amount);
     }
 
-    private airdropDefined(calldata: Calldata): BytesWriter {
-        this.onlyOwner(Blockchain.tx.sender);
+    private airdrop(calldata: Calldata): BytesWriter {
+        this.onlyDeployer(Blockchain.tx.sender);
 
-        const amount = calldata.readU256();
-        const amountOfAddresses: u32 = calldata.readU32();
-        for (let i: u32 = 0; i < amountOfAddresses; i++) {
-            const address = calldata.readAddress();
+        const addressAndAmount: AddressMap<u256> = calldata.readAddressValueTuple();
 
-            this._mint(address, amount, false);
+        const addresses: Address[] = addressAndAmount.keys();
+        for (let i: i32 = 0; i < addresses.length; i++) {
+            const address = addresses[i];
+            const amount = addressAndAmount.get(address);
+
+            this._optimizedMint(address, amount);
         }
+
+        this._totalSupply.commit();
 
         const writer: BytesWriter = new BytesWriter(1);
         writer.writeBoolean(true);
