@@ -3,6 +3,7 @@ import {
     Address,
     AddressMap,
     Blockchain,
+    BOOLEAN_BYTE_LENGTH,
     BytesWriter,
     Calldata,
     encodeSelector,
@@ -47,7 +48,7 @@ export class Moto extends OP_20 {
 
         this._totalSupply.commit();
 
-        const writer: BytesWriter = new BytesWriter(1);
+        const writer: BytesWriter = new BytesWriter(BOOLEAN_BYTE_LENGTH);
         writer.writeBoolean(true);
 
         return writer;
