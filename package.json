@@ -27,7 +27,12 @@
     "type": "module",
     "dependencies": {
         "@assemblyscript/loader": "^0.27.31",
+<<<<<<< HEAD
         "@btc-vision/btc-runtime": "^1.3.19",
+=======
+        "@btc-vision/as-bignum": "^0.0.2",
+        "@btc-vision/btc-runtime": "file:../btc-runtime",
+>>>>>>> origin/main
         "gulplog": "^2.2.0",
         "ts-node": "^10.9.2"
     }
