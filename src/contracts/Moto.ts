@@ -53,20 +53,4 @@ export class Moto extends OP_20 {
 
         return writer;
     }
-
-    /*private mintNoEvent(to: Address, value: u256): void {
-        if (!this.balanceOfMap.has(to)) {
-            this.balanceOfMap.set(to, value);
-        } else {
-            const toBalance: u256 = this.balanceOfMap.get(to);
-            const newToBalance: u256 = SafeMath.add(toBalance, value);
-
-            this.balanceOfMap.set(to, newToBalance);
-        }
-
-        // @ts-ignore
-        this._totalSupply += value;
-
-        if (this._totalSupply.value > this.maxSupply) throw new Revert('Max supply reached');
-    }*/
 }
