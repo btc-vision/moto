@@ -7,12 +7,12 @@ import {
     BytesWriter,
     Calldata,
     encodeSelector,
-    OP_20,
     Selector,
 } from '@btc-vision/btc-runtime/runtime';
+import { AdministeredOP20 } from './AdministeredOP20';
 
 @final
-export class Moto extends OP_20 {
+export class Moto extends AdministeredOP20 {
     public constructor() {
         super(u256.fromU64(2_100_000_000_000_000), 8, 'Moto', 'MOTO');
     }
