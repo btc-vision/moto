@@ -144,3 +144,4 @@ fixdb/
 build
 debug
 yarn.lock
+abi.json

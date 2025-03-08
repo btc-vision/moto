@@ -1,3 +1,4 @@
+import { u256 } from '@btc-vision/as-bignum/assembly';
 import {
     Address,
     ADDRESS_BYTE_LENGTH,
@@ -5,34 +6,44 @@ import {
     BOOLEAN_BYTE_LENGTH,
     BytesWriter,
     Calldata,
-    encodeSelector,
     OP_20,
     Revert,
     SafeMath,
-    Selector,
     StoredAddress,
 } from '@btc-vision/btc-runtime/runtime';
-import { u256 } from '@btc-vision/as-bignum/assembly';
 
 export abstract class AdministeredOP20 extends OP_20 {
     protected _admin: StoredAddress;
 
-    public get admin(): Address {
-        if (!this._admin.value) throw new Revert('Admin not set');
-
-        return this._admin.value;
-    }
-
-    protected constructor(maxSupply: u256, decimals: u8, name: string, symbol: string) {
+    constructor(maxSupply: u256, decimals: u8, name: string, symbol: string) {
         super(maxSupply, decimals, name, symbol);
+
         this._admin = new StoredAddress(Blockchain.nextPointer, new Address());
     }
 
     public onDeployment(_calldata: Calldata): void {
         super.onDeployment(_calldata);
+
         this._admin.value = this.contractDeployer;
     }
 
+    /**
+     * Returns the current admin of the contract.
+     *
+     * @param _calldata Empty calldata.
+     */
+    @method()
+    @returns('address')
+    public admin(_calldata: Calldata): BytesWriter {
+        const response = new BytesWriter(ADDRESS_BYTE_LENGTH);
+        response.writeAddress(this._admin.value);
+
+        return response;
+    }
+
+    /**
+     * Throws if the caller is not the admin.
+     */
     protected onlyAdmin(): void {
         if (!Blockchain.tx.sender.equals(this._admin.value)) {
             throw new Revert('Only admin can call this method');
@@ -45,15 +56,21 @@ export abstract class AdministeredOP20 extends OP_20 {
      *
      * @param calldata Calldata containing an `Address` to change the admin to.
      */
+    @method('changeAdmin', {
+        name: 'to',
+        type: ABIDataTypes.ADDRESS,
+    })
+    @returns('bool')
     public changeAdmin(calldata: Calldata): BytesWriter {
         this.onlyAdmin();
 
-        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
         const to = calldata.readAddress();
 
         this._admin.value = to;
 
+        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
         response.writeBoolean(true);
+
         return response;
     }
 
@@ -66,10 +83,21 @@ export abstract class AdministeredOP20 extends OP_20 {
      *
      * @throws if the caller is not the admin or if the amount exceeds `totalSupply` or is 0.
      */
+    @method(
+        'adminMint',
+        {
+            name: 'to',
+            type: ABIDataTypes.ADDRESS,
+        },
+        {
+            name: 'amount',
+            type: ABIDataTypes.UINT256,
+        },
+    )
+    @returns('bool')
     public adminMint(calldata: Calldata): BytesWriter {
         this.onlyAdmin();
 
-        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
         const to = calldata.readAddress();
         const amount = calldata.readU256();
 
@@ -88,7 +116,7 @@ export abstract class AdministeredOP20 extends OP_20 {
 
         this._totalSupply.add(amount);
 
-        // Can be more useful in the future if this contract is moved up to a more generic standard
+        // TODO: Can be more useful in the future if this contract is moved up to a more generic standard
         // Right now this is used for tokens where maxSupply is u256.Max, so this kind of error would be caught above.
         if (this._totalSupply.value > this.maxSupply) {
             throw new Revert('Max supply exceeded.');
@@ -96,7 +124,9 @@ export abstract class AdministeredOP20 extends OP_20 {
 
         this.createMintEvent(to, amount);
 
+        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
         response.writeBoolean(true);
+
         return response;
     }
 
@@ -108,20 +138,44 @@ export abstract class AdministeredOP20 extends OP_20 {
      *
      * @throws if the caller is not the admin or if the amount is 0.
      */
+    @method(
+        'adminBurn',
+        {
+            name: 'from',
+            type: ABIDataTypes.ADDRESS,
+        },
+        {
+            name: 'amount',
+            type: ABIDataTypes.UINT256,
+        },
+    )
+    @returns('bool')
     public adminBurn(calldata: Calldata): BytesWriter {
-        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
         const from = calldata.readAddress();
         const amount = calldata.readU256();
 
         this._adminBurn(from, amount);
 
         this.createBurnEvent(amount);
+
+        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
         response.writeBoolean(true);
+
         return response;
     }
 
+    /**
+     * Transfers tokens from a given address to the dead address, burning them without affecting total supply.
+     * DOES NOT require the address to burn from to have given the admin approval to spend the burn amount.
+     *
+     * @param from The address to burn from.
+     * @param amount The amount to burn.
+     *
+     * @throws if the caller is not the admin, if the amount is 0, or if the amount exceeds the balance of the `from` address.
+     */
     protected _adminBurn(from: Address, amount: u256): void {
         this.onlyAdmin();
+
         const balance = this.balanceOfMap.get(from);
 
         if (amount == u256.Zero) {
@@ -134,24 +188,5 @@ export abstract class AdministeredOP20 extends OP_20 {
 
         this.balanceOfMap.set(from, SafeMath.sub(balance, amount));
         this._totalSupply.value = SafeMath.sub(this.totalSupply, amount);
-    }
-
-    public execute(method: Selector, calldata: Calldata): BytesWriter {
-        switch (method) {
-            case encodeSelector('adminMint(address,uint256)'):
-                return this.adminMint(calldata);
-            case encodeSelector('adminBurn(address,uint256)'):
-                return this.adminBurn(calldata);
-            case encodeSelector('changeAdmin(address)'):
-                return this.changeAdmin(calldata);
-            case encodeSelector('admin'): {
-                const response = new BytesWriter(ADDRESS_BYTE_LENGTH);
-                response.writeAddress(this.admin);
-
-                return response;
-            }
-            default:
-                return super.execute(method, calldata);
-        }
     }
 }

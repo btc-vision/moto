@@ -1,6 +1,6 @@
 {
     "targets": {
-        "moto": {
+        "release": {
             "outFile": "build/moto.wasm",
             "textFile": "build/moto.wat",
             "sourceMap": false,
@@ -12,10 +12,13 @@
             "runtime": "stub",
             "memoryBase": 0,
             "initialMemory": 1,
-            "maximumMemory": 512
+            "maximumMemory": 512,
+            "bindings": "esm",
+            "exportStart": "start",
+            "use": ["abort=src/index/abort"]
         }
     },
     "options": {
-        "bindings": "esm"
+        "transform": "@btc-vision/opnet-transform"
     }
 }
