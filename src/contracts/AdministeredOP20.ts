@@ -6,23 +6,31 @@ import {
     BOOLEAN_BYTE_LENGTH,
     BytesWriter,
     Calldata,
-    OP_20,
+    DeployableOP_20,
+    OP20InitParameters,
     Revert,
     SafeMath,
     StoredAddress,
 } from '@btc-vision/btc-runtime/runtime';
 
-export abstract class AdministeredOP20 extends OP_20 {
+export abstract class AdministeredOP20 extends DeployableOP_20 {
     protected _admin: StoredAddress;
 
-    constructor(maxSupply: u256, decimals: u8, name: string, symbol: string) {
-        super(maxSupply, decimals, name, symbol);
+    constructor(
+        private __maxSupply: u256,
+        private __decimals: u8,
+        private __name: string,
+        private __symbol: string,
+    ) {
+        super();
 
         this._admin = new StoredAddress(Blockchain.nextPointer);
     }
 
     public onDeployment(_calldata: Calldata): void {
-        super.onDeployment(_calldata);
+        this.instantiate(
+            new OP20InitParameters(this.__maxSupply, this.__decimals, this.__name, this.__symbol),
+        );
 
         this._admin.value = this.contractDeployer;
     }
