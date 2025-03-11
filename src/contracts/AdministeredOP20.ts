@@ -18,7 +18,7 @@ export abstract class AdministeredOP20 extends OP_20 {
     constructor(maxSupply: u256, decimals: u8, name: string, symbol: string) {
         super(maxSupply, decimals, name, symbol);
 
-        this._admin = new StoredAddress(Blockchain.nextPointer, new Address());
+        this._admin = new StoredAddress(Blockchain.nextPointer);
     }
 
     public onDeployment(_calldata: Calldata): void {
