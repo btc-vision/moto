@@ -9,9 +9,9 @@
     "author": "BlobMaster41",
     "license": "LICENSE.MD",
     "devDependencies": {
-        "@types/node": "^22.10.2",
-        "assemblyscript": "^0.27.31",
-        "prettier": "^3.4.2"
+        "@types/node": "^22.13.10",
+        "assemblyscript": "^0.27.35",
+        "prettier": "^3.5.3"
     },
     "keywords": [
         "bitcoin",
@@ -26,9 +26,9 @@
     "homepage": "https://opnet.org",
     "type": "module",
     "dependencies": {
-        "@assemblyscript/loader": "^0.27.31",
-        "@btc-vision/btc-runtime": "file:../btc-runtime",
-        "@btc-vision/opnet-transform": "file:../opnet-transform",
+        "@assemblyscript/loader": "^0.27.35",
+        "@btc-vision/btc-runtime": "^1.5.1",
+        "@btc-vision/opnet-transform": "^0.0.5",
         "gulplog": "^2.2.0",
         "ts-node": "^10.9.2"
     }
