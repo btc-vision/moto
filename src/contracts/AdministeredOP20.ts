@@ -70,7 +70,7 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
     })
     @returns('bool')
     public changeAdmin(calldata: Calldata): BytesWriter {
-        this.onlyAdmin();
+        this.onlyDeployer(Blockchain.tx.sender);
 
         const to = calldata.readAddress();
 
