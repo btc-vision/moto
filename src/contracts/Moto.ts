@@ -9,10 +9,22 @@ import {
 } from '@btc-vision/btc-runtime/runtime';
 import { AdministeredOP20 } from './AdministeredOP20';
 
+// To generate the following Uint8Array value, run generateUint8ArrayValues.ts
+const maxSupplyUint8Array: Uint8Array = new Uint8Array(32);
+
+maxSupplyUint8Array.set(
+    [
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x3b, 0x2e, 0x3c, 0x9f, 0xd0, 0x80, 0x3c, 0xe8, 0x00,
+        0x00, 0x00,
+    ],
+    0,
+);
+
 @final
 export class Moto extends AdministeredOP20 {
     constructor() {
-        super(u256.fromU64(2_100_000_000_000_000), 8, 'Moto', 'MOTO');
+        super(u256.fromUint8ArrayBE(maxSupplyUint8Array), 18, 'Moto', 'MOTO');
     }
 
     /**
