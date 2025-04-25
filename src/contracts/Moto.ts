@@ -46,9 +46,12 @@ export class Moto extends AdministeredOP20 {
      */
     @method('airdrop', {
         name: 'addressAndAmount',
-        type: 'tuple(address,uint256)',
+        type: ABIDataTypes.ADDRESS_UINT256_TUPLE,
     })
-    @returns('bool')
+    @returns({
+        name: 'success',
+        type: ABIDataTypes.BOOL,
+    })
     public airdrop(calldata: Calldata): BytesWriter {
         this.onlyDeployer(Blockchain.tx.sender);
 
