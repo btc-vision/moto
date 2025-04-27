@@ -52,6 +52,7 @@ export class Moto extends AdministeredOP20 {
         name: 'success',
         type: ABIDataTypes.BOOL,
     })
+    @emit('Mint')
     public airdrop(calldata: Calldata): BytesWriter {
         this.onlyDeployer(Blockchain.tx.sender);
 
