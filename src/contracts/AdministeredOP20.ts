@@ -60,7 +60,7 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
 
     /**
      * Changes the contract admin.
-     * Only callable by the current admin.
+     * Only callable by the current deployer.
      *
      * @param calldata Calldata containing an `Address` to change the admin to.
      */
