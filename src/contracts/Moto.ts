@@ -24,7 +24,7 @@ maxSupplyUint8Array.set(
 @final
 export class Moto extends AdministeredOP20 {
     constructor() {
-        super(u256.fromUint8ArrayBE(maxSupplyUint8Array), 18, 'Moto', 'MOTO');
+        super(u256.fromUint8ArrayBE(maxSupplyUint8Array), 18, 'Motoswap', 'MOTO');
     }
 
     /**
