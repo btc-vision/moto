@@ -159,6 +159,8 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
     )
     @returns('bool')
     public adminBurn(calldata: Calldata): BytesWriter {
+        this.onlyAdmin();
+
         const from = calldata.readAddress();
         const amount = calldata.readU256();
 
@@ -182,8 +184,6 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
      * @throws if the caller is not the admin, if the amount is 0, or if the amount exceeds the balance of the `from` address.
      */
     protected _adminBurn(from: Address, amount: u256): void {
-        this.onlyAdmin();
-
         const balance = this.balanceOfMap.get(from);
 
         if (amount == u256.Zero) {
