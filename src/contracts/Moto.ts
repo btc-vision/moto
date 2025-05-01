@@ -6,6 +6,7 @@ import {
     BOOLEAN_BYTE_LENGTH,
     BytesWriter,
     Calldata,
+    SafeMath,
 } from '@btc-vision/btc-runtime/runtime';
 import { AdministeredOP20 } from './AdministeredOP20';
 
@@ -28,18 +29,6 @@ export class Moto extends AdministeredOP20 {
     }
 
     /**
-     * Mints tokens to the specified address.
-     *
-     * @param calldata Calldata containing an `Address` and a `u256` to mint to.
-     */
-    private _optimizedMint(address: Address, amount: u256): void {
-        this.balanceOfMap.set(address, amount);
-        this._totalSupply.addNoCommit(amount);
-
-        this.createMintEvent(address, amount);
-    }
-
-    /**
      * Mints tokens to the specified addresses.
      *
      * @param calldata Calldata containing an `AddressMap<Address, u256>` to mint to.
@@ -57,16 +46,28 @@ export class Moto extends AdministeredOP20 {
         this.onlyDeployer(Blockchain.tx.sender);
 
         const addressAndAmount: AddressMap<u256> = calldata.readAddressMapU256();
-
         const addresses: Address[] = addressAndAmount.keys();
+
+        let totalAirdropped: u256 = u256.Zero;
+
         for (let i: i32 = 0; i < addresses.length; i++) {
             const address = addresses[i];
             const amount = addressAndAmount.get(address);
 
-            this._optimizedMint(address, amount);
+            const currentBalance: u256 = this.balanceOfMap.get(address);
+
+            if (currentBalance) {
+                this.balanceOfMap.set(address, SafeMath.add(currentBalance, amount));
+            } else {
+                this.balanceOfMap.set(address, amount);
+            }
+
+            totalAirdropped = SafeMath.add(totalAirdropped, amount);
+
+            this.createMintEvent(address, amount);
         }
 
-        this._totalSupply.commit();
+        this._totalSupply.set(SafeMath.add(this._totalSupply.value, totalAirdropped));
 
         const writer: BytesWriter = new BytesWriter(BOOLEAN_BYTE_LENGTH);
         writer.writeBoolean(true);
