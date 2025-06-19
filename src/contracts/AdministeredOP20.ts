@@ -6,14 +6,14 @@ import {
     BOOLEAN_BYTE_LENGTH,
     BytesWriter,
     Calldata,
-    DeployableOP_20,
+    OP20,
     OP20InitParameters,
     Revert,
     SafeMath,
     StoredAddress,
 } from '@btc-vision/btc-runtime/runtime';
 
-export abstract class AdministeredOP20 extends DeployableOP_20 {
+export abstract class AdministeredOP20 extends OP20 {
     protected _admin: StoredAddress;
 
     constructor(
