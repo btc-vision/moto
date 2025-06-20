@@ -3,7 +3,6 @@ import {
     Address,
     AddressMap,
     Blockchain,
-    BOOLEAN_BYTE_LENGTH,
     BytesWriter,
     Calldata,
     SafeMath,
@@ -26,11 +25,7 @@ export class Moto extends AdministeredOP20 {
         name: 'addressAndAmount',
         type: ABIDataTypes.ADDRESS_UINT256_TUPLE,
     })
-    @returns({
-        name: 'success',
-        type: ABIDataTypes.BOOL,
-    })
-    @emit('Mint')
+    @emit('Minted')
     public airdrop(calldata: Calldata): BytesWriter {
         this.onlyDeployer(Blockchain.tx.sender);
 
@@ -53,14 +48,11 @@ export class Moto extends AdministeredOP20 {
 
             totalAirdropped = SafeMath.add(totalAirdropped, amount);
 
-            this.createMintEvent(address, amount);
+            this.createMintedEvent(address, amount);
         }
 
         this._totalSupply.set(SafeMath.add(this._totalSupply.value, totalAirdropped));
 
-        const writer: BytesWriter = new BytesWriter(BOOLEAN_BYTE_LENGTH);
-        writer.writeBoolean(true);
-
-        return writer;
+        return new BytesWriter(0);
     }
 }
