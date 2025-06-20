@@ -156,7 +156,7 @@ export abstract class AdministeredOP20 extends OP20 {
 
         this._adminBurn(from, amount);
 
-        this.createBurnEvent(amount);
+        this.createBurnedEvent(from, amount);
 
         return new BytesWriter(0);
     }
