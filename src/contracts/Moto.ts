@@ -53,7 +53,7 @@ export class Moto extends AdministeredOP20 {
 
             totalAirdropped = SafeMath.add(totalAirdropped, amount);
 
-            this.createMintEvent(address, amount);
+            this.createMintedEvent(address, amount);
         }
 
         this._totalSupply.set(SafeMath.add(this._totalSupply.value, totalAirdropped));
