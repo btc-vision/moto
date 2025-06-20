@@ -3,7 +3,6 @@ import {
     Address,
     ADDRESS_BYTE_LENGTH,
     Blockchain,
-    BOOLEAN_BYTE_LENGTH,
     BytesWriter,
     Calldata,
     OP20,
@@ -68,7 +67,6 @@ export abstract class AdministeredOP20 extends OP20 {
         name: 'to',
         type: ABIDataTypes.ADDRESS,
     })
-    @returns('bool')
     public changeAdmin(calldata: Calldata): BytesWriter {
         this.onlyDeployer(Blockchain.tx.sender);
 
@@ -76,10 +74,7 @@ export abstract class AdministeredOP20 extends OP20 {
 
         this._admin.value = to;
 
-        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
-        response.writeBoolean(true);
-
-        return response;
+        return new BytesWriter(0);
     }
 
     /**
@@ -102,7 +97,6 @@ export abstract class AdministeredOP20 extends OP20 {
             type: ABIDataTypes.UINT256,
         },
     )
-    @returns('bool')
     public adminMint(calldata: Calldata): BytesWriter {
         this.onlyAdmin();
 
@@ -130,12 +124,9 @@ export abstract class AdministeredOP20 extends OP20 {
             throw new Revert('Max supply exceeded.');
         }
 
-        this.createMintEvent(to, amount);
+        this.createMintedEvent(to, amount);
 
-        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
-        response.writeBoolean(true);
-
-        return response;
+        return new BytesWriter(0);
     }
 
     /**
@@ -157,7 +148,6 @@ export abstract class AdministeredOP20 extends OP20 {
             type: ABIDataTypes.UINT256,
         },
     )
-    @returns('bool')
     public adminBurn(calldata: Calldata): BytesWriter {
         this.onlyAdmin();
 
@@ -168,10 +158,7 @@ export abstract class AdministeredOP20 extends OP20 {
 
         this.createBurnEvent(amount);
 
-        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
-        response.writeBoolean(true);
-
-        return response;
+        return new BytesWriter(0);
     }
 
     /**
