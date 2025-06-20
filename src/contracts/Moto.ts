@@ -25,7 +25,7 @@ export class Moto extends AdministeredOP20 {
         name: 'addressAndAmount',
         type: ABIDataTypes.ADDRESS_UINT256_TUPLE,
     })
-    @emit('Mint')
+    @emit('Minted')
     public airdrop(calldata: Calldata): BytesWriter {
         this.onlyDeployer(Blockchain.tx.sender);
 
