@@ -3,17 +3,16 @@ import {
     Address,
     ADDRESS_BYTE_LENGTH,
     Blockchain,
-    BOOLEAN_BYTE_LENGTH,
     BytesWriter,
     Calldata,
-    DeployableOP_20,
+    OP20,
     OP20InitParameters,
     Revert,
     SafeMath,
     StoredAddress,
 } from '@btc-vision/btc-runtime/runtime';
 
-export abstract class AdministeredOP20 extends DeployableOP_20 {
+export abstract class AdministeredOP20 extends OP20 {
     protected _admin: StoredAddress;
 
     constructor(
@@ -68,7 +67,6 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
         name: 'to',
         type: ABIDataTypes.ADDRESS,
     })
-    @returns('bool')
     public changeAdmin(calldata: Calldata): BytesWriter {
         this.onlyDeployer(Blockchain.tx.sender);
 
@@ -76,10 +74,7 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
 
         this._admin.value = to;
 
-        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
-        response.writeBoolean(true);
-
-        return response;
+        return new BytesWriter(0);
     }
 
     /**
@@ -102,7 +97,6 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
             type: ABIDataTypes.UINT256,
         },
     )
-    @returns('bool')
     public adminMint(calldata: Calldata): BytesWriter {
         this.onlyAdmin();
 
@@ -130,12 +124,9 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
             throw new Revert('Max supply exceeded.');
         }
 
-        this.createMintEvent(to, amount);
+        this.createMintedEvent(to, amount);
 
-        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
-        response.writeBoolean(true);
-
-        return response;
+        return new BytesWriter(0);
     }
 
     /**
@@ -157,7 +148,6 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
             type: ABIDataTypes.UINT256,
         },
     )
-    @returns('bool')
     public adminBurn(calldata: Calldata): BytesWriter {
         this.onlyAdmin();
 
@@ -166,12 +156,9 @@ export abstract class AdministeredOP20 extends DeployableOP_20 {
 
         this._adminBurn(from, amount);
 
-        this.createBurnEvent(amount);
+        this.createBurnedEvent(from, amount);
 
-        const response = new BytesWriter(BOOLEAN_BYTE_LENGTH);
-        response.writeBoolean(true);
-
-        return response;
+        return new BytesWriter(0);
     }
 
     /**
