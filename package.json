@@ -9,7 +9,7 @@
     "author": "BlobMaster41",
     "license": "LICENSE.MD",
     "devDependencies": {
-        "@types/node": "^24.5.2",
+        "@types/node": "^24.6.0",
         "assemblyscript": "^0.28.8",
         "prettier": "^3.6.2"
     },
@@ -28,7 +28,7 @@
     "dependencies": {
         "@assemblyscript/loader": "^0.28.8",
         "@btc-vision/as-bignum": "^0.0.5",
-        "@btc-vision/btc-runtime": "^1.9.11",
+        "@btc-vision/btc-runtime": "^1.9.12",
         "@btc-vision/opnet-transform": "^0.1.12",
         "gulplog": "^2.2.0",
         "ts-node": "^10.9.2"
