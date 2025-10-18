@@ -9,8 +9,8 @@
     "author": "BlobMaster41",
     "license": "LICENSE.MD",
     "devDependencies": {
-        "@types/node": "^24.6.2",
-        "assemblyscript": "^0.28.8",
+        "@types/node": "^24.8.1",
+        "assemblyscript": "^0.28.9",
         "prettier": "^3.6.2"
     },
     "keywords": [
@@ -26,7 +26,7 @@
     "homepage": "https://opnet.org",
     "type": "module",
     "dependencies": {
-        "@assemblyscript/loader": "^0.28.8",
+        "@assemblyscript/loader": "^0.28.9",
         "@btc-vision/as-bignum": "^0.0.5",
         "@btc-vision/btc-runtime": "^1.9.13",
         "@btc-vision/opnet-transform": "^0.1.12",
