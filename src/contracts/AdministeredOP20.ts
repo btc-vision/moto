@@ -120,7 +120,7 @@ export abstract class AdministeredOP20 extends OP20 {
 
         // TODO: Can be more useful in the future if this contract is moved up to a more generic standard
         // Right now this is used for tokens where maxSupply is u256.Max, so this kind of error would be caught above.
-        if (this._totalSupply.value > this.maxSupply) {
+        if (this._totalSupply.value > this._maxSupply.value) {
             throw new Revert('Max supply exceeded.');
         }
 
@@ -182,6 +182,6 @@ export abstract class AdministeredOP20 extends OP20 {
         }
 
         this.balanceOfMap.set(from, SafeMath.sub(balance, amount));
-        this._totalSupply.value = SafeMath.sub(this.totalSupply, amount);
+        this._totalSupply.value = SafeMath.sub(this._totalSupply.value, amount);
     }
 }
