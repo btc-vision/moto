@@ -5,7 +5,9 @@ import {
     Blockchain,
     BytesWriter,
     Calldata,
+    ON_OP20_RECEIVED_SELECTOR,
     SafeMath,
+    SELECTOR_BYTE_LENGTH,
 } from '@btc-vision/btc-runtime/runtime';
 import { AdministeredOP20 } from './AdministeredOP20';
 
@@ -54,5 +56,34 @@ export class Moto extends AdministeredOP20 {
         this._totalSupply.set(SafeMath.add(this._totalSupply.value, totalAirdropped));
 
         return new BytesWriter(0);
+    }
+
+    @method(
+        {
+            name: 'operator',
+            type: ABIDataTypes.ADDRESS,
+        },
+        {
+            name: 'from',
+            type: ABIDataTypes.ADDRESS,
+        },
+        {
+            name: 'amount',
+            type: ABIDataTypes.UINT256,
+        },
+        {
+            name: 'data',
+            type: ABIDataTypes.BYTES,
+        },
+    )
+    @returns({
+        name: 'selector',
+        type: ABIDataTypes.BYTES4,
+    })
+    public onOP20Received(_calldata: Calldata): BytesWriter {
+        const response = new BytesWriter(SELECTOR_BYTE_LENGTH);
+        response.writeSelector(ON_OP20_RECEIVED_SELECTOR);
+
+        return response;
     }
 }
