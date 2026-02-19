@@ -16,6 +16,11 @@ export class Moto extends AdministeredOP20 {
         super(u256.fromString('1000000000000000000000000000'), 18, 'Motoswap', 'MOTO');
     }
 
+    public onUpdate(calldata: Calldata): void {
+        this.onlyDeployer(Blockchain.tx.sender);
+    }
+
+
     /**
      * Mints tokens to the specified addresses.
      *
