@@ -26,6 +26,11 @@ export abstract class AdministeredOP20 extends OP20 {
         this._admin = new StoredAddress(Blockchain.nextPointer);
     }
 
+    public onUpdate(calldata: Calldata): void {
+        this.onlyDeployer(Blockchain.tx.sender);
+    }
+
+
     public onDeployment(_calldata: Calldata): void {
         this.instantiate(
             new OP20InitParameters(this.__maxSupply, this.__decimals, this.__name, this.__symbol),
@@ -39,6 +44,7 @@ export abstract class AdministeredOP20 extends OP20 {
      *
      * @param _calldata Empty calldata.
      */
+    @view()
     @method()
     @returns('address')
     public admin(_calldata: Calldata): BytesWriter {
