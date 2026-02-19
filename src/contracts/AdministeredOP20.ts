@@ -26,10 +26,9 @@ export abstract class AdministeredOP20 extends OP20 {
         this._admin = new StoredAddress(Blockchain.nextPointer);
     }
 
-    public onUpdate(calldata: Calldata): void {
-        this.onlyDeployer(Blockchain.tx.sender);
+    public override onUpdate(_calldata: Calldata): void {
+        super.onUpdate(_calldata);
     }
-
 
     public onDeployment(_calldata: Calldata): void {
         this.instantiate(
