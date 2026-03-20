@@ -48,4 +48,4 @@ directory.
 
 ## License
 
-View the license by clicking [here](https://github.com/btc-vision/wbtc/blob/main/LICENSE.md).
+View the license by clicking [here](https://github.com/btc-vision/moto/blob/main/LICENSE.md).

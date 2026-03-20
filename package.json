@@ -6,11 +6,11 @@
     "scripts": {
         "build": "asc src/index.ts --target release --measure --uncheckedBehavior never"
     },
-    "author": "BlobMaster41",
+    "author": "Motoswap",
     "license": "LICENSE.MD",
     "devDependencies": {
         "@btc-vision/assemblyscript": "^0.29.3",
-        "@types/node": "^25.3.0",
+        "@types/node": "^25.5.0",
         "prettier": "^3.8.1"
     },
     "keywords": [
@@ -26,11 +26,10 @@
     "homepage": "https://opnet.org",
     "type": "module",
     "dependencies": {
-        "@assemblyscript/loader": "^0.28.9",
         "@btc-vision/as-bignum": "^1.0.0",
+        "@btc-vision/as-loader": "^0.0.0",
         "@btc-vision/btc-runtime": "^1.11.0",
         "@btc-vision/opnet-transform": "^1.2.2",
-        "gulplog": "^2.2.0",
         "ts-node": "^10.9.2"
     }
 }

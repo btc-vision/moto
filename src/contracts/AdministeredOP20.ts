@@ -30,7 +30,7 @@ export abstract class AdministeredOP20 extends OP20 {
         super.onUpdate(_calldata);
     }
 
-    public onDeployment(_calldata: Calldata): void {
+    public override onDeployment(_calldata: Calldata): void {
         this.instantiate(
             new OP20InitParameters(this.__maxSupply, this.__decimals, this.__name, this.__symbol),
         );
@@ -75,9 +75,7 @@ export abstract class AdministeredOP20 extends OP20 {
     public changeAdmin(calldata: Calldata): BytesWriter {
         this.onlyDeployer(Blockchain.tx.sender);
 
-        const to = calldata.readAddress();
-
-        this._admin.value = to;
+        this._admin.value = calldata.readAddress();
 
         return new BytesWriter(0);
     }
