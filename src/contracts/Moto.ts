@@ -7,6 +7,7 @@ import {
     Revert,
     SafeMath,
     StoredBoolean,
+    ABIDataTypes,
 } from '@btc-vision/btc-runtime/runtime';
 import { AdministeredOP20 } from './AdministeredOP20';
 
