@@ -10,7 +10,7 @@
     "license": "LICENSE.MD",
     "devDependencies": {
         "@btc-vision/assemblyscript": "^0.29.3",
-        "@types/node": "^25.5.0",
+        "@types/node": "^26.0.0",
         "prettier": "^3.8.1"
     },
     "keywords": [
